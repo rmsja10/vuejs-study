@@ -14,7 +14,7 @@
 </head>
 <body>
 	<h1>★로또 당첨 기원★</h1>
-	<ul>
+	<ul id="lotto_ul">
 		<li>1</li>
 		<li>2</li>
 		<li>3</li>
@@ -61,6 +61,61 @@
 		<li>44</li>
 		<li>45</li>
 	</ul>
-	<input type="button" value="SAVE">
+	<input id="save_btn" type="button" value="SAVE">
+
+	<script>
+		var selectedNumArr = [];
+
+		Array.prototype.contains = function(val) {
+			for (var i = 0; i < this.length; i++) {
+				if (this[i] == val) {
+					return true;
+				}
+			}
+			return false;
+		};
+
+		Array.prototype.removeVal = function(val) {
+			for (var i = 0; i < this.length; i++) {
+				if (this[i] == val) {
+					this.splice(i, 1);
+					i--;
+				}
+			}
+			return this;
+		}
+
+		var module = module || {};
+
+		module.clickNumber = function(){
+			var curTex = this.innerText;
+			if(selectedNumArr.contains(curTex)){
+				selectedNumArr.removeVal(curTex);
+				this.style.color = null;
+			}else{
+				if(selectedNumArr.length < 6){
+					selectedNumArr.push(curTex);
+					this.style.color = "red";	
+				}else{
+					alert("6개 이상 숫자를 선택 할 수 없습니다.");
+				}
+			}
+		};
+
+		module.saveResult = function(){
+			var selectedNumbers = selectedNumArr.join(",");
+			alert(selectedNumbers);
+		};
+
+		(function(){
+			var selectedLi = document.querySelectorAll("#lotto_ul li");
+			for(var i = 0; i < selectedLi.length; i++){
+				selectedLi[i].addEventListener('click', module.clickNumber);
+			}
+
+			var saveBtn = document.querySelector("#save_btn");
+			saveBtn.addEventListener('click', module.saveResult);
+		}());
+	</script>
 </body>
 </html>
